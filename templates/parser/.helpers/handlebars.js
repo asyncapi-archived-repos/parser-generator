@@ -58,18 +58,28 @@ module.exports = (Handlebars, _) => {
       return `*${GoPublicName(jsonSchemaObj.$ref.split('/').slice(-1)[0])}`;
     }
 
+    if (Object.keys(jsonSchemaObj).length === 0) {
+      return 'map[string]json.RawMessage{}';
+    }
+
     switch (jsonSchemaObj.type) {
       case 'string':
         return 'string';
       case 'boolean':
         return 'bool';
+      case "integer":
+        return 'int';
+      case 'number':
+        return 'float64';
       case 'array':
         if (jsonSchemaObj.items) {
           return `[]${GoTypeFrom(jsonSchemaObj.items)}`;
         }
+      case 'object':
+        return 'map[string]json.RawMessage{}';
       default:
         console.error('Unsupported JSONSchema type:', jsonSchemaObj.type, 'in object', jsonSchemaObj);
-        return 'string';
+        return 'map[string]json.RawMessage{}';
     }
   }
 
@@ -85,8 +95,8 @@ module.exports = (Handlebars, _) => {
     return options.inverse(this);
   });
 
-  Handlebars.registerHelper('ifIsRef', (obj, options) => {
-    if (obj && obj.$ref) {
+  Handlebars.registerHelper('ifNotBoolean', (obj, options) => {
+    if (typeof obj !== 'boolean' && obj !== undefined && obj !== null) {
       return options.fn(this);
     }
 
