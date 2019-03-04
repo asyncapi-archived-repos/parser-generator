@@ -59,7 +59,7 @@ module.exports = (Handlebars, _) => {
     }
 
     if (Object.keys(jsonSchemaObj).length === 0) {
-      return 'map[string]json.RawMessage{}';
+      return 'map[string]json.RawMessage';
     }
 
     switch (jsonSchemaObj.type) {
@@ -76,10 +76,10 @@ module.exports = (Handlebars, _) => {
           return `[]${GoTypeFrom(jsonSchemaObj.items)}`;
         }
       case 'object':
-        return 'map[string]json.RawMessage{}';
+        return 'map[string]json.RawMessage';
       default:
         console.error('Unsupported JSONSchema type:', jsonSchemaObj.type, 'in object', jsonSchemaObj);
-        return 'map[string]json.RawMessage{}';
+        return 'map[string]json.RawMessage';
     }
   }
 
@@ -105,6 +105,14 @@ module.exports = (Handlebars, _) => {
 
   Handlebars.registerHelper('ifTypeOf', (obj, type, options) => {
     if (obj && typeof obj === type) {
+      return options.fn(this);
+    }
+
+    return options.inverse(this);
+  });
+
+  Handlebars.registerHelper('ifCanNotGuessStruct', (obj, options) => {
+    if (obj && (obj.oneOf || obj.anyOf || obj.allOf || obj.additionalProperties === true)) {
       return options.fn(this);
     }
 

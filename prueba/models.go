@@ -67,7 +67,6 @@ func (value AsyncapiDocument) MarshalJSON() ([]byte, error) {
   return MergeExtensions(jsonByteArray, value.Extensions)
 }
 
-
 // Reference maps AsyncAPI "Reference" object
 type Reference struct {
   Ref string `json:"$ref,omitempty"`
@@ -377,7 +376,7 @@ func (value Channels) MarshalJSON() ([]byte, error) {
 type Components struct {
   Schemas *Schemas `json:"schemas,omitempty"`
   Messages *Messages `json:"messages,omitempty"`
-  SecuritySchemes map[string]json.RawMessage{} `json:"securitySchemes,omitempty"`
+  SecuritySchemes map[string]json.RawMessage `json:"securitySchemes,omitempty"`
   Parameters *Parameters `json:"parameters,omitempty"`
 }
 
@@ -429,7 +428,7 @@ type Schema struct {
   Ref string `json:"$ref,omitempty"`
   Title string `json:"title,omitempty"`
   Description string `json:"description,omitempty"`
-  Default map[string]json.RawMessage{} `json:"default,omitempty"`
+  Default map[string]json.RawMessage `json:"default,omitempty"`
   MultipleOf float64 `json:"multipleOf,omitempty"`
   Maximum float64 `json:"maximum,omitempty"`
   ExclusiveMaximum bool `json:"exclusiveMaximum,omitempty"`
@@ -445,21 +444,21 @@ type Schema struct {
   MaxProperties int `json:"maxProperties,omitempty"`
   MinProperties int `json:"minProperties,omitempty"`
   Required []string `json:"required,omitempty"`
-  Enum map[string]json.RawMessage{} `json:"enum,omitempty"`
+  Enum map[string]json.RawMessage `json:"enum,omitempty"`
   Deprecated bool `json:"deprecated,omitempty"`
-  AdditionalProperties map[string]json.RawMessage{} `json:"additionalProperties,omitempty"`
-  Type map[string]json.RawMessage{} `json:"type,omitempty"`
-  Items map[string]json.RawMessage{} `json:"items,omitempty"`
+  AdditionalProperties map[string]json.RawMessage `json:"additionalProperties,omitempty"`
+  Type map[string]json.RawMessage `json:"type,omitempty"`
+  Items map[string]json.RawMessage `json:"items,omitempty"`
   AllOf []*Schema `json:"allOf,omitempty"`
   OneOf []*Schema `json:"oneOf,omitempty"`
   AnyOf []*Schema `json:"anyOf,omitempty"`
   Not *Schema `json:"not,omitempty"`
-  Properties map[string]json.RawMessage{} `json:"properties,omitempty"`
+  Properties map[string]json.RawMessage `json:"properties,omitempty"`
   Discriminator string `json:"discriminator,omitempty"`
   ReadOnly bool `json:"readOnly,omitempty"`
   Xml *Xml `json:"xml,omitempty"`
   ExternalDocs *ExternalDocs `json:"externalDocs,omitempty"`
-  Example map[string]json.RawMessage{} `json:"example,omitempty"`
+  Example map[string]json.RawMessage `json:"example,omitempty"`
 }
 
 // UnmarshalJSON unmarshals JSON
@@ -750,7 +749,7 @@ type Operation struct {
   Tags []*Tag `json:"tags,omitempty"`
   ExternalDocs *ExternalDocs `json:"externalDocs,omitempty"`
   OperationId string `json:"operationId,omitempty"`
-  Message map[string]json.RawMessage{} `json:"message,omitempty"`
+  Message map[string]json.RawMessage `json:"message,omitempty"`
 }
 
 // UnmarshalJSON unmarshals JSON
@@ -798,7 +797,7 @@ func (value Operation) MarshalJSON() ([]byte, error) {
 // Stream maps AsyncAPI "stream" object
 type Stream struct {
   Extensions map[string]json.RawMessage `json:"-"`
-  Framing map[string]json.RawMessage{} `json:"framing,omitempty"`
+  Framing map[string]json.RawMessage `json:"framing,omitempty"`
   Read []*Message `json:"read,omitempty"`
   Write []*Message `json:"write,omitempty"`
 }
@@ -840,62 +839,10 @@ func (value Stream) MarshalJSON() ([]byte, error) {
 }
 
 // Message maps AsyncAPI "message" object
-type Message struct {
-}
-
-// UnmarshalJSON unmarshals JSON
-func (value *Message) UnmarshalJSON(data []byte) error {
-	type Alias Message
-	jsonMap := Alias{}
-	var err error
-	if err = json.Unmarshal(data, &jsonMap); err != nil {
-		return err
-  }
-
-
-
-	return nil
-}
-
-// MarshalJSON marshals JSON
-func (value Message) MarshalJSON() ([]byte, error) {
-	type Alias Message
-	jsonByteArray, err := json.Marshal(&Alias{
-	})
-	if err != nil {
-		return nil, err
-  }
-  return jsonByteArray, nil
-}
+type Message map[string]json.RawMessage
 
 // VendorExtension maps AsyncAPI "vendorExtension" object
-type VendorExtension struct {
-}
-
-// UnmarshalJSON unmarshals JSON
-func (value *VendorExtension) UnmarshalJSON(data []byte) error {
-	type Alias VendorExtension
-	jsonMap := Alias{}
-	var err error
-	if err = json.Unmarshal(data, &jsonMap); err != nil {
-		return err
-  }
-
-
-
-	return nil
-}
-
-// MarshalJSON marshals JSON
-func (value VendorExtension) MarshalJSON() ([]byte, error) {
-	type Alias VendorExtension
-	jsonByteArray, err := json.Marshal(&Alias{
-	})
-	if err != nil {
-		return nil, err
-  }
-  return jsonByteArray, nil
-}
+type VendorExtension map[string]json.RawMessage
 
 // Tag maps AsyncAPI "tag" object
 type Tag struct {
@@ -942,33 +889,7 @@ func (value Tag) MarshalJSON() ([]byte, error) {
 }
 
 // SecurityScheme maps AsyncAPI "SecurityScheme" object
-type SecurityScheme struct {
-}
-
-// UnmarshalJSON unmarshals JSON
-func (value *SecurityScheme) UnmarshalJSON(data []byte) error {
-	type Alias SecurityScheme
-	jsonMap := Alias{}
-	var err error
-	if err = json.Unmarshal(data, &jsonMap); err != nil {
-		return err
-  }
-
-
-
-	return nil
-}
-
-// MarshalJSON marshals JSON
-func (value SecurityScheme) MarshalJSON() ([]byte, error) {
-	type Alias SecurityScheme
-	jsonByteArray, err := json.Marshal(&Alias{
-	})
-	if err != nil {
-		return nil, err
-  }
-  return jsonByteArray, nil
-}
+type SecurityScheme map[string]json.RawMessage
 
 // UserPassword maps AsyncAPI "userPassword" object
 type UserPassword struct {
@@ -1179,33 +1100,7 @@ func (value AsymmetricEncryption) MarshalJSON() ([]byte, error) {
 }
 
 // HttpSecurityScheme maps AsyncAPI "HTTPSecurityScheme" object
-type HttpSecurityScheme struct {
-}
-
-// UnmarshalJSON unmarshals JSON
-func (value *HttpSecurityScheme) UnmarshalJSON(data []byte) error {
-	type Alias HttpSecurityScheme
-	jsonMap := Alias{}
-	var err error
-	if err = json.Unmarshal(data, &jsonMap); err != nil {
-		return err
-  }
-
-
-
-	return nil
-}
-
-// MarshalJSON marshals JSON
-func (value HttpSecurityScheme) MarshalJSON() ([]byte, error) {
-	type Alias HttpSecurityScheme
-	jsonByteArray, err := json.Marshal(&Alias{
-	})
-	if err != nil {
-		return nil, err
-  }
-  return jsonByteArray, nil
-}
+type HttpSecurityScheme map[string]json.RawMessage
 
 // NonBearerHttpSecurityScheme maps AsyncAPI "NonBearerHTTPSecurityScheme" object
 type NonBearerHttpSecurityScheme struct {
@@ -1350,7 +1245,7 @@ type Oauth2Flows struct {
   Extensions map[string]json.RawMessage `json:"-"`
   Type string `json:"type,omitempty"`
   Description string `json:"description,omitempty"`
-  Flows map[string]json.RawMessage{} `json:"flows,omitempty"`
+  Flows map[string]json.RawMessage `json:"flows,omitempty"`
 }
 
 // UnmarshalJSON unmarshals JSON
