@@ -1,3 +1,5 @@
+const RefParser = require('json-schema-ref-parser-sync');
+
 module.exports = (Handlebars, _) => {
 
   Handlebars.registerHelper('concat', (str1, str2, separator) => {
@@ -17,9 +19,11 @@ module.exports = (Handlebars, _) => {
     return `${path}.${propName}`;
   });
 
-  Handlebars.registerHelper('isRequired', (obj, key) => {
-    return obj && obj.required && !!(obj.required.includes(key));
-  });
+  function isRequired (obj, key) {
+    return obj && Array.isArray(obj.required) && !!(obj.required.includes(key));
+  }
+
+  Handlebars.registerHelper('isRequired', isRequired);
 
   Handlebars.registerHelper('acceptedValues', items => {
     if (!items) return '<em>Any</em>';
@@ -41,10 +45,6 @@ module.exports = (Handlebars, _) => {
     return number + 1;
   });
 
-  Handlebars.registerHelper('log', (something) => {
-    console.log(require('util').inspect(something, { depth: null }));
-  });
-
   function GoPublicName (something) {
     return _.upperFirst(_.camelCase(something));
   }
@@ -53,13 +53,29 @@ module.exports = (Handlebars, _) => {
     return GoPublicName(something);
   });
 
-  function GoTypeFrom (jsonSchemaObj) {
+  function nameFromRef(url) {
+    if (!url) return;
+    return url.split('/').slice(-1)[0];
+  }
+
+  Handlebars.registerHelper('nameFromRef', nameFromRef);
+
+  function GoTypeFrom (jsonSchemaObj, ctxt, name) {
+    if (jsonSchemaObj['x-go-parser-type']) return jsonSchemaObj['x-go-parser-type'];
+
+    let required = false;
+    if (ctxt && name) required = isRequired(ctxt, name);
+
     if (jsonSchemaObj.$ref) {
-      return `*${GoPublicName(jsonSchemaObj.$ref.split('/').slice(-1)[0])}`;
+      return `${required ? '' : '*'}${GoPublicName(nameFromRef(jsonSchemaObj.$ref))}`;
+    }
+
+    if (jsonSchemaObj.patternProperties && jsonSchemaObj.patternProperties[''] && jsonSchemaObj.patternProperties[''].$ref) {
+      return `${required ? '' : '*'}${GoPublicName(nameFromRef(jsonSchemaObj.patternProperties[''].$ref))}`;
     }
 
     if (Object.keys(jsonSchemaObj).length === 0) {
-      return 'map[string]json.RawMessage';
+      return 'json.RawMessage';
     }
 
     switch (jsonSchemaObj.type) {
@@ -76,16 +92,14 @@ module.exports = (Handlebars, _) => {
           return `[]${GoTypeFrom(jsonSchemaObj.items)}`;
         }
       case 'object':
-        return 'map[string]json.RawMessage';
+        return 'json.RawMessage';
       default:
         console.error('Unsupported JSONSchema type:', jsonSchemaObj.type, 'in object', jsonSchemaObj);
-        return 'map[string]json.RawMessage';
+        return 'json.RawMessage';
     }
   }
 
-  Handlebars.registerHelper('GoTypeFrom', (jsonSchemaObj) => {
-    return GoTypeFrom(jsonSchemaObj);
-  });
+  Handlebars.registerHelper('GoTypeFrom', GoTypeFrom);
 
   Handlebars.registerHelper('ifHasExtensions', (obj, options) => {
     if (obj && obj.patternProperties && obj.patternProperties['^x-']) {
@@ -112,10 +126,27 @@ module.exports = (Handlebars, _) => {
   });
 
   Handlebars.registerHelper('ifCanNotGuessStruct', (obj, options) => {
-    if (obj && (obj.oneOf || obj.anyOf || obj.allOf || obj.additionalProperties === true)) {
+    if (
+      obj && (
+        obj.allOf || obj.additionalProperties === true ||
+        (obj.patternProperties && obj.patternProperties[''] && obj.patternProperties[''].$ref)
+      )
+    ) {
       return options.fn(this);
     }
 
     return options.inverse(this);
+  });
+
+  Handlebars.registerHelper('shouldAvoidSchema', (name) => {
+    return ['SecurityScheme', 'HTTPSecurityScheme', 'operationMessage'].includes(name);
+  });
+
+  Handlebars.registerHelper('deref', (obj) => {
+    return RefParser.dereference(obj, {
+      dereference: {
+        circular: 'ignore'
+      }
+    });
   });
 };

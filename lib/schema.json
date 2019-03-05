@@ -5,19 +5,8 @@
   "required": [
     "asyncapi",
     "id",
-    "info"
-  ],
-  "oneOf": [
-    {
-      "required": [
-        "channels"
-      ]
-    },
-    {
-      "required": [
-        "stream"
-      ]
-    }
+    "info",
+    "channels"
   ],
   "additionalProperties": false,
   "patternProperties": {
@@ -424,6 +413,7 @@
           "default": {}
         },
         "type": {
+          "x-go-parser-type": "string",
           "anyOf": [
             {
               "enum": [
@@ -648,32 +638,38 @@
           "type": "string"
         },
         "message": {
-          "oneOf": [
-            {
-              "$ref": "#/definitions/message"
-            },
-            {
-              "type": "object",
-              "required": [
-                "oneOf"
-              ],
-              "additionalProperties": false,
-              "patternProperties": {
-                "^x-": {
-                  "$ref": "#/definitions/vendorExtension"
-                }
-              },
-              "properties": {
-                "oneOf": {
-                  "type": "array",
-                  "minItems": 2,
-                  "items": {
-                    "$ref": "#/definitions/message"
-                  }
-                }
-              }
-            }
-          ]
+          "$ref": "#/definitions/operationMessage"
+        }
+      }
+    },
+    "operationMessage": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/message"
+        },
+        {
+          "$ref": "#/definitions/messageCollection"
+        }
+      ]
+    },
+    "messageCollection": {
+      "type": "object",
+      "required": [
+        "oneOf"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-": {
+          "$ref": "#/definitions/vendorExtension"
+        }
+      },
+      "properties": {
+        "oneOf": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/definitions/message"
+          }
         }
       }
     },
@@ -758,69 +754,56 @@
       }
     },
     "message": {
-      "anyOf": [
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "patternProperties": {
-            "^x-": {
-              "$ref": "#/definitions/vendorExtension"
-            }
-          }
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "patternProperties": {
-            "^x-": {
-              "$ref": "#/definitions/vendorExtension"
-            }
-          },
-          "properties": {
-            "schemaFormat": {
-              "type": "string"
-            },
-            "contentType": {
-              "type": "string"
-            },
-            "headers": {
-              "$ref": "#/definitions/schema"
-            },
-            "payload": {},
-            "tags": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/tag"
-              },
-              "uniqueItems": true
-            },
-            "summary": {
-              "type": "string",
-              "description": "A brief summary of the message."
-            },
-            "name": {
-              "type": "string",
-              "description": "Name of the message."
-            },
-            "title": {
-              "type": "string",
-              "description": "A human-friendly title for the message."
-            },
-            "description": {
-              "type": "string",
-              "description": "A longer description of the message. CommonMark is allowed."
-            },
-            "externalDocs": {
-              "$ref": "#/definitions/externalDocs"
-            },
-            "deprecated": {
-              "type": "boolean",
-              "default": false
-            },
-            "example": {}
-          }
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-": {
+          "$ref": "#/definitions/vendorExtension"
         }
-      ]
+      },
+      "properties": {
+        "schemaFormat": {
+          "type": "string"
+        },
+        "contentType": {
+          "type": "string"
+        },
+        "headers": {
+          "$ref": "#/definitions/schema"
+        },
+        "payload": {},
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/tag"
+          },
+          "uniqueItems": true
+        },
+        "summary": {
+          "type": "string",
+          "description": "A brief summary of the message."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the message."
+        },
+        "title": {
+          "type": "string",
+          "description": "A human-friendly title for the message."
+        },
+        "description": {
+          "type": "string",
+          "description": "A longer description of the message. CommonMark is allowed."
+        },
+        "externalDocs": {
+          "$ref": "#/definitions/externalDocs"
+        },
+        "deprecated": {
+          "type": "boolean",
+          "default": false
+        },
+        "example": {}
+      }
     },
     "vendorExtension": {
       "description": "Any property starting with x- is valid.",

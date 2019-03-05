@@ -7,10 +7,10 @@ type AsyncapiDocument struct {
   Extensions map[string]json.RawMessage `json:"-"`
   Asyncapi string `json:"asyncapi,omitempty"`
   Id string `json:"id,omitempty"`
-  Info *Info `json:"info,omitempty"`
+  Info Info `json:"info,omitempty"`
   Servers []*Server `json:"servers,omitempty"`
   DefaultContentType string `json:"defaultContentType,omitempty"`
-  Channels *Channels `json:"channels,omitempty"`
+  Channels Channels `json:"channels,omitempty"`
   Stream *Stream `json:"stream,omitempty"`
   Components *Components `json:"components,omitempty"`
   Tags []*Tag `json:"tags,omitempty"`
@@ -19,8 +19,8 @@ type AsyncapiDocument struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *AsyncapiDocument) UnmarshalJSON(data []byte) error {
-	type Alias AsyncapiDocument
-	jsonMap := Alias{}
+	type AsyncapiDocumentAlias AsyncapiDocument
+	jsonMap := AsyncapiDocumentAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -48,8 +48,8 @@ func (value *AsyncapiDocument) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value AsyncapiDocument) MarshalJSON() ([]byte, error) {
-	type Alias AsyncapiDocument
-	jsonByteArray, err := json.Marshal(&Alias{
+	type AsyncapiDocumentAlias AsyncapiDocument
+	jsonByteArray, err := json.Marshal(&AsyncapiDocumentAlias{
     Asyncapi: value.Asyncapi,
     Id: value.Id,
     Info: value.Info,
@@ -74,8 +74,8 @@ type Reference struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *Reference) UnmarshalJSON(data []byte) error {
-	type Alias Reference
-	jsonMap := Alias{}
+	type ReferenceAlias Reference
+	jsonMap := ReferenceAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -89,8 +89,8 @@ func (value *Reference) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value Reference) MarshalJSON() ([]byte, error) {
-	type Alias Reference
-	jsonByteArray, err := json.Marshal(&Alias{
+	type ReferenceAlias Reference
+	jsonByteArray, err := json.Marshal(&ReferenceAlias{
     Ref: value.Ref,
 	})
 	if err != nil {
@@ -112,8 +112,8 @@ type Info struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *Info) UnmarshalJSON(data []byte) error {
-	type Alias Info
-	jsonMap := Alias{}
+	type InfoAlias Info
+	jsonMap := InfoAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -137,8 +137,8 @@ func (value *Info) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value Info) MarshalJSON() ([]byte, error) {
-	type Alias Info
-	jsonByteArray, err := json.Marshal(&Alias{
+	type InfoAlias Info
+	jsonByteArray, err := json.Marshal(&InfoAlias{
     Title: value.Title,
     Version: value.Version,
     Description: value.Description,
@@ -162,8 +162,8 @@ type Contact struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *Contact) UnmarshalJSON(data []byte) error {
-	type Alias Contact
-	jsonMap := Alias{}
+	type ContactAlias Contact
+	jsonMap := ContactAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -184,8 +184,8 @@ func (value *Contact) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value Contact) MarshalJSON() ([]byte, error) {
-	type Alias Contact
-	jsonByteArray, err := json.Marshal(&Alias{
+	type ContactAlias Contact
+	jsonByteArray, err := json.Marshal(&ContactAlias{
     Name: value.Name,
     Url: value.Url,
     Email: value.Email,
@@ -205,8 +205,8 @@ type License struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *License) UnmarshalJSON(data []byte) error {
-	type Alias License
-	jsonMap := Alias{}
+	type LicenseAlias License
+	jsonMap := LicenseAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -226,8 +226,8 @@ func (value *License) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value License) MarshalJSON() ([]byte, error) {
-	type Alias License
-	jsonByteArray, err := json.Marshal(&Alias{
+	type LicenseAlias License
+	jsonByteArray, err := json.Marshal(&LicenseAlias{
     Name: value.Name,
     Url: value.Url,
 	})
@@ -251,8 +251,8 @@ type Server struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *Server) UnmarshalJSON(data []byte) error {
-	type Alias Server
-	jsonMap := Alias{}
+	type ServerAlias Server
+	jsonMap := ServerAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -277,8 +277,8 @@ func (value *Server) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value Server) MarshalJSON() ([]byte, error) {
-	type Alias Server
-	jsonByteArray, err := json.Marshal(&Alias{
+	type ServerAlias Server
+	jsonByteArray, err := json.Marshal(&ServerAlias{
     Url: value.Url,
     Description: value.Description,
     Scheme: value.Scheme,
@@ -307,8 +307,8 @@ type ServerVariable struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *ServerVariable) UnmarshalJSON(data []byte) error {
-	type Alias ServerVariable
-	jsonMap := Alias{}
+	type ServerVariableAlias ServerVariable
+	jsonMap := ServerVariableAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -330,8 +330,8 @@ func (value *ServerVariable) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value ServerVariable) MarshalJSON() ([]byte, error) {
-	type Alias ServerVariable
-	jsonByteArray, err := json.Marshal(&Alias{
+	type ServerVariableAlias ServerVariable
+	jsonByteArray, err := json.Marshal(&ServerVariableAlias{
     Enum: value.Enum,
     Default: value.Default,
     Description: value.Description,
@@ -344,46 +344,20 @@ func (value ServerVariable) MarshalJSON() ([]byte, error) {
 }
 
 // Channels maps AsyncAPI "channels" object
-type Channels struct {
-}
-
-// UnmarshalJSON unmarshals JSON
-func (value *Channels) UnmarshalJSON(data []byte) error {
-	type Alias Channels
-	jsonMap := Alias{}
-	var err error
-	if err = json.Unmarshal(data, &jsonMap); err != nil {
-		return err
-  }
-
-
-
-	return nil
-}
-
-// MarshalJSON marshals JSON
-func (value Channels) MarshalJSON() ([]byte, error) {
-	type Alias Channels
-	jsonByteArray, err := json.Marshal(&Alias{
-	})
-	if err != nil {
-		return nil, err
-  }
-  return jsonByteArray, nil
-}
+type Channels map[string]*ChannelItem
 
 // Components maps AsyncAPI "components" object
 type Components struct {
   Schemas *Schemas `json:"schemas,omitempty"`
   Messages *Messages `json:"messages,omitempty"`
-  SecuritySchemes map[string]json.RawMessage `json:"securitySchemes,omitempty"`
+  SecuritySchemes json.RawMessage `json:"securitySchemes,omitempty"`
   Parameters *Parameters `json:"parameters,omitempty"`
 }
 
 // UnmarshalJSON unmarshals JSON
 func (value *Components) UnmarshalJSON(data []byte) error {
-	type Alias Components
-	jsonMap := Alias{}
+	type ComponentsAlias Components
+	jsonMap := ComponentsAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -400,8 +374,8 @@ func (value *Components) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value Components) MarshalJSON() ([]byte, error) {
-	type Alias Components
-	jsonByteArray, err := json.Marshal(&Alias{
+	type ComponentsAlias Components
+	jsonByteArray, err := json.Marshal(&ComponentsAlias{
     Schemas: value.Schemas,
     Messages: value.Messages,
     SecuritySchemes: value.SecuritySchemes,
@@ -428,7 +402,7 @@ type Schema struct {
   Ref string `json:"$ref,omitempty"`
   Title string `json:"title,omitempty"`
   Description string `json:"description,omitempty"`
-  Default map[string]json.RawMessage `json:"default,omitempty"`
+  Default json.RawMessage `json:"default,omitempty"`
   MultipleOf float64 `json:"multipleOf,omitempty"`
   Maximum float64 `json:"maximum,omitempty"`
   ExclusiveMaximum bool `json:"exclusiveMaximum,omitempty"`
@@ -444,27 +418,27 @@ type Schema struct {
   MaxProperties int `json:"maxProperties,omitempty"`
   MinProperties int `json:"minProperties,omitempty"`
   Required []string `json:"required,omitempty"`
-  Enum map[string]json.RawMessage `json:"enum,omitempty"`
+  Enum json.RawMessage `json:"enum,omitempty"`
   Deprecated bool `json:"deprecated,omitempty"`
-  AdditionalProperties map[string]json.RawMessage `json:"additionalProperties,omitempty"`
-  Type map[string]json.RawMessage `json:"type,omitempty"`
-  Items map[string]json.RawMessage `json:"items,omitempty"`
+  AdditionalProperties json.RawMessage `json:"additionalProperties,omitempty"`
+  Type json.RawMessage `json:"type,omitempty"`
+  Items json.RawMessage `json:"items,omitempty"`
   AllOf []*Schema `json:"allOf,omitempty"`
   OneOf []*Schema `json:"oneOf,omitempty"`
   AnyOf []*Schema `json:"anyOf,omitempty"`
   Not *Schema `json:"not,omitempty"`
-  Properties map[string]json.RawMessage `json:"properties,omitempty"`
+  Properties json.RawMessage `json:"properties,omitempty"`
   Discriminator string `json:"discriminator,omitempty"`
   ReadOnly bool `json:"readOnly,omitempty"`
   Xml *Xml `json:"xml,omitempty"`
   ExternalDocs *ExternalDocs `json:"externalDocs,omitempty"`
-  Example map[string]json.RawMessage `json:"example,omitempty"`
+  Example json.RawMessage `json:"example,omitempty"`
 }
 
 // UnmarshalJSON unmarshals JSON
 func (value *Schema) UnmarshalJSON(data []byte) error {
-	type Alias Schema
-	jsonMap := Alias{}
+	type SchemaAlias Schema
+	jsonMap := SchemaAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -516,8 +490,8 @@ func (value *Schema) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value Schema) MarshalJSON() ([]byte, error) {
-	type Alias Schema
-	jsonByteArray, err := json.Marshal(&Alias{
+	type SchemaAlias Schema
+	jsonByteArray, err := json.Marshal(&SchemaAlias{
     Ref: value.Ref,
     Title: value.Title,
     Description: value.Description,
@@ -570,8 +544,8 @@ type Xml struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *Xml) UnmarshalJSON(data []byte) error {
-	type Alias Xml
-	jsonMap := Alias{}
+	type XmlAlias Xml
+	jsonMap := XmlAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -589,8 +563,8 @@ func (value *Xml) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value Xml) MarshalJSON() ([]byte, error) {
-	type Alias Xml
-	jsonByteArray, err := json.Marshal(&Alias{
+	type XmlAlias Xml
+	jsonByteArray, err := json.Marshal(&XmlAlias{
     Name: value.Name,
     Namespace: value.Namespace,
     Prefix: value.Prefix,
@@ -612,8 +586,8 @@ type ExternalDocs struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *ExternalDocs) UnmarshalJSON(data []byte) error {
-	type Alias ExternalDocs
-	jsonMap := Alias{}
+	type ExternalDocsAlias ExternalDocs
+	jsonMap := ExternalDocsAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -633,8 +607,8 @@ func (value *ExternalDocs) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value ExternalDocs) MarshalJSON() ([]byte, error) {
-	type Alias ExternalDocs
-	jsonByteArray, err := json.Marshal(&Alias{
+	type ExternalDocsAlias ExternalDocs
+	jsonByteArray, err := json.Marshal(&ExternalDocsAlias{
     Description: value.Description,
     Url: value.Url,
 	})
@@ -656,8 +630,8 @@ type ChannelItem struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *ChannelItem) UnmarshalJSON(data []byte) error {
-	type Alias ChannelItem
-	jsonMap := Alias{}
+	type ChannelItemAlias ChannelItem
+	jsonMap := ChannelItemAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -680,8 +654,8 @@ func (value *ChannelItem) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value ChannelItem) MarshalJSON() ([]byte, error) {
-	type Alias ChannelItem
-	jsonByteArray, err := json.Marshal(&Alias{
+	type ChannelItemAlias ChannelItem
+	jsonByteArray, err := json.Marshal(&ChannelItemAlias{
     Ref: value.Ref,
     Parameters: value.Parameters,
     Publish: value.Publish,
@@ -705,8 +679,8 @@ type Parameter struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *Parameter) UnmarshalJSON(data []byte) error {
-	type Alias Parameter
-	jsonMap := Alias{}
+	type ParameterAlias Parameter
+	jsonMap := ParameterAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -728,8 +702,8 @@ func (value *Parameter) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value Parameter) MarshalJSON() ([]byte, error) {
-	type Alias Parameter
-	jsonByteArray, err := json.Marshal(&Alias{
+	type ParameterAlias Parameter
+	jsonByteArray, err := json.Marshal(&ParameterAlias{
     Description: value.Description,
     Name: value.Name,
     Schema: value.Schema,
@@ -749,13 +723,13 @@ type Operation struct {
   Tags []*Tag `json:"tags,omitempty"`
   ExternalDocs *ExternalDocs `json:"externalDocs,omitempty"`
   OperationId string `json:"operationId,omitempty"`
-  Message map[string]json.RawMessage `json:"message,omitempty"`
+  Message *OperationMessage `json:"message,omitempty"`
 }
 
 // UnmarshalJSON unmarshals JSON
 func (value *Operation) UnmarshalJSON(data []byte) error {
-	type Alias Operation
-	jsonMap := Alias{}
+	type OperationAlias Operation
+	jsonMap := OperationAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -779,8 +753,8 @@ func (value *Operation) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value Operation) MarshalJSON() ([]byte, error) {
-	type Alias Operation
-	jsonByteArray, err := json.Marshal(&Alias{
+	type OperationAlias Operation
+	jsonByteArray, err := json.Marshal(&OperationAlias{
     Summary: value.Summary,
     Description: value.Description,
     Tags: value.Tags,
@@ -794,18 +768,56 @@ func (value Operation) MarshalJSON() ([]byte, error) {
   return MergeExtensions(jsonByteArray, value.Extensions)
 }
 
+// MessageCollection maps AsyncAPI "messageCollection" object
+type MessageCollection struct {
+  Extensions map[string]json.RawMessage `json:"-"`
+  OneOf []*Message `json:"oneOf,omitempty"`
+}
+
+// UnmarshalJSON unmarshals JSON
+func (value *MessageCollection) UnmarshalJSON(data []byte) error {
+	type MessageCollectionAlias MessageCollection
+	jsonMap := MessageCollectionAlias{}
+	var err error
+	if err = json.Unmarshal(data, &jsonMap); err != nil {
+		return err
+  }
+
+  value.OneOf = jsonMap.OneOf
+
+  exts, err := ExtensionsFromJSON(data)
+	if err != nil {
+		return err
+	}
+	value.Extensions = exts
+
+	return nil
+}
+
+// MarshalJSON marshals JSON
+func (value MessageCollection) MarshalJSON() ([]byte, error) {
+	type MessageCollectionAlias MessageCollection
+	jsonByteArray, err := json.Marshal(&MessageCollectionAlias{
+    OneOf: value.OneOf,
+	})
+	if err != nil {
+		return nil, err
+  }
+  return MergeExtensions(jsonByteArray, value.Extensions)
+}
+
 // Stream maps AsyncAPI "stream" object
 type Stream struct {
   Extensions map[string]json.RawMessage `json:"-"`
-  Framing map[string]json.RawMessage `json:"framing,omitempty"`
+  Framing json.RawMessage `json:"framing,omitempty"`
   Read []*Message `json:"read,omitempty"`
   Write []*Message `json:"write,omitempty"`
 }
 
 // UnmarshalJSON unmarshals JSON
 func (value *Stream) UnmarshalJSON(data []byte) error {
-	type Alias Stream
-	jsonMap := Alias{}
+	type StreamAlias Stream
+	jsonMap := StreamAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -826,8 +838,8 @@ func (value *Stream) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value Stream) MarshalJSON() ([]byte, error) {
-	type Alias Stream
-	jsonByteArray, err := json.Marshal(&Alias{
+	type StreamAlias Stream
+	jsonByteArray, err := json.Marshal(&StreamAlias{
     Framing: value.Framing,
     Read: value.Read,
     Write: value.Write,
@@ -839,7 +851,75 @@ func (value Stream) MarshalJSON() ([]byte, error) {
 }
 
 // Message maps AsyncAPI "message" object
-type Message map[string]json.RawMessage
+type Message struct {
+  Extensions map[string]json.RawMessage `json:"-"`
+  SchemaFormat string `json:"schemaFormat,omitempty"`
+  ContentType string `json:"contentType,omitempty"`
+  Headers *Schema `json:"headers,omitempty"`
+  Payload json.RawMessage `json:"payload,omitempty"`
+  Tags []*Tag `json:"tags,omitempty"`
+  Summary string `json:"summary,omitempty"`
+  Name string `json:"name,omitempty"`
+  Title string `json:"title,omitempty"`
+  Description string `json:"description,omitempty"`
+  ExternalDocs *ExternalDocs `json:"externalDocs,omitempty"`
+  Deprecated bool `json:"deprecated,omitempty"`
+  Example json.RawMessage `json:"example,omitempty"`
+}
+
+// UnmarshalJSON unmarshals JSON
+func (value *Message) UnmarshalJSON(data []byte) error {
+	type MessageAlias Message
+	jsonMap := MessageAlias{}
+	var err error
+	if err = json.Unmarshal(data, &jsonMap); err != nil {
+		return err
+  }
+
+  value.SchemaFormat = jsonMap.SchemaFormat
+  value.ContentType = jsonMap.ContentType
+  value.Headers = jsonMap.Headers
+  value.Payload = jsonMap.Payload
+  value.Tags = jsonMap.Tags
+  value.Summary = jsonMap.Summary
+  value.Name = jsonMap.Name
+  value.Title = jsonMap.Title
+  value.Description = jsonMap.Description
+  value.ExternalDocs = jsonMap.ExternalDocs
+  value.Deprecated = jsonMap.Deprecated
+  value.Example = jsonMap.Example
+
+  exts, err := ExtensionsFromJSON(data)
+	if err != nil {
+		return err
+	}
+	value.Extensions = exts
+
+	return nil
+}
+
+// MarshalJSON marshals JSON
+func (value Message) MarshalJSON() ([]byte, error) {
+	type MessageAlias Message
+	jsonByteArray, err := json.Marshal(&MessageAlias{
+    SchemaFormat: value.SchemaFormat,
+    ContentType: value.ContentType,
+    Headers: value.Headers,
+    Payload: value.Payload,
+    Tags: value.Tags,
+    Summary: value.Summary,
+    Name: value.Name,
+    Title: value.Title,
+    Description: value.Description,
+    ExternalDocs: value.ExternalDocs,
+    Deprecated: value.Deprecated,
+    Example: value.Example,
+	})
+	if err != nil {
+		return nil, err
+  }
+  return MergeExtensions(jsonByteArray, value.Extensions)
+}
 
 // VendorExtension maps AsyncAPI "vendorExtension" object
 type VendorExtension map[string]json.RawMessage
@@ -854,8 +934,8 @@ type Tag struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *Tag) UnmarshalJSON(data []byte) error {
-	type Alias Tag
-	jsonMap := Alias{}
+	type TagAlias Tag
+	jsonMap := TagAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -876,8 +956,8 @@ func (value *Tag) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value Tag) MarshalJSON() ([]byte, error) {
-	type Alias Tag
-	jsonByteArray, err := json.Marshal(&Alias{
+	type TagAlias Tag
+	jsonByteArray, err := json.Marshal(&TagAlias{
     Name: value.Name,
     Description: value.Description,
     ExternalDocs: value.ExternalDocs,
@@ -888,9 +968,6 @@ func (value Tag) MarshalJSON() ([]byte, error) {
   return MergeExtensions(jsonByteArray, value.Extensions)
 }
 
-// SecurityScheme maps AsyncAPI "SecurityScheme" object
-type SecurityScheme map[string]json.RawMessage
-
 // UserPassword maps AsyncAPI "userPassword" object
 type UserPassword struct {
   Extensions map[string]json.RawMessage `json:"-"`
@@ -900,8 +977,8 @@ type UserPassword struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *UserPassword) UnmarshalJSON(data []byte) error {
-	type Alias UserPassword
-	jsonMap := Alias{}
+	type UserPasswordAlias UserPassword
+	jsonMap := UserPasswordAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -921,8 +998,8 @@ func (value *UserPassword) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value UserPassword) MarshalJSON() ([]byte, error) {
-	type Alias UserPassword
-	jsonByteArray, err := json.Marshal(&Alias{
+	type UserPasswordAlias UserPassword
+	jsonByteArray, err := json.Marshal(&UserPasswordAlias{
     Type: value.Type,
     Description: value.Description,
 	})
@@ -942,8 +1019,8 @@ type ApiKey struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *ApiKey) UnmarshalJSON(data []byte) error {
-	type Alias ApiKey
-	jsonMap := Alias{}
+	type ApiKeyAlias ApiKey
+	jsonMap := ApiKeyAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -964,8 +1041,8 @@ func (value *ApiKey) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value ApiKey) MarshalJSON() ([]byte, error) {
-	type Alias ApiKey
-	jsonByteArray, err := json.Marshal(&Alias{
+	type ApiKeyAlias ApiKey
+	jsonByteArray, err := json.Marshal(&ApiKeyAlias{
     Type: value.Type,
     In: value.In,
     Description: value.Description,
@@ -985,8 +1062,8 @@ type X509 struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *X509) UnmarshalJSON(data []byte) error {
-	type Alias X509
-	jsonMap := Alias{}
+	type X509Alias X509
+	jsonMap := X509Alias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -1006,8 +1083,8 @@ func (value *X509) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value X509) MarshalJSON() ([]byte, error) {
-	type Alias X509
-	jsonByteArray, err := json.Marshal(&Alias{
+	type X509Alias X509
+	jsonByteArray, err := json.Marshal(&X509Alias{
     Type: value.Type,
     Description: value.Description,
 	})
@@ -1026,8 +1103,8 @@ type SymmetricEncryption struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *SymmetricEncryption) UnmarshalJSON(data []byte) error {
-	type Alias SymmetricEncryption
-	jsonMap := Alias{}
+	type SymmetricEncryptionAlias SymmetricEncryption
+	jsonMap := SymmetricEncryptionAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -1047,8 +1124,8 @@ func (value *SymmetricEncryption) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value SymmetricEncryption) MarshalJSON() ([]byte, error) {
-	type Alias SymmetricEncryption
-	jsonByteArray, err := json.Marshal(&Alias{
+	type SymmetricEncryptionAlias SymmetricEncryption
+	jsonByteArray, err := json.Marshal(&SymmetricEncryptionAlias{
     Type: value.Type,
     Description: value.Description,
 	})
@@ -1067,8 +1144,8 @@ type AsymmetricEncryption struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *AsymmetricEncryption) UnmarshalJSON(data []byte) error {
-	type Alias AsymmetricEncryption
-	jsonMap := Alias{}
+	type AsymmetricEncryptionAlias AsymmetricEncryption
+	jsonMap := AsymmetricEncryptionAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -1088,8 +1165,8 @@ func (value *AsymmetricEncryption) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value AsymmetricEncryption) MarshalJSON() ([]byte, error) {
-	type Alias AsymmetricEncryption
-	jsonByteArray, err := json.Marshal(&Alias{
+	type AsymmetricEncryptionAlias AsymmetricEncryption
+	jsonByteArray, err := json.Marshal(&AsymmetricEncryptionAlias{
     Type: value.Type,
     Description: value.Description,
 	})
@@ -1098,9 +1175,6 @@ func (value AsymmetricEncryption) MarshalJSON() ([]byte, error) {
   }
   return MergeExtensions(jsonByteArray, value.Extensions)
 }
-
-// HttpSecurityScheme maps AsyncAPI "HTTPSecurityScheme" object
-type HttpSecurityScheme map[string]json.RawMessage
 
 // NonBearerHttpSecurityScheme maps AsyncAPI "NonBearerHTTPSecurityScheme" object
 type NonBearerHttpSecurityScheme struct {
@@ -1112,8 +1186,8 @@ type NonBearerHttpSecurityScheme struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *NonBearerHttpSecurityScheme) UnmarshalJSON(data []byte) error {
-	type Alias NonBearerHttpSecurityScheme
-	jsonMap := Alias{}
+	type NonBearerHttpSecuritySchemeAlias NonBearerHttpSecurityScheme
+	jsonMap := NonBearerHttpSecuritySchemeAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -1134,8 +1208,8 @@ func (value *NonBearerHttpSecurityScheme) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value NonBearerHttpSecurityScheme) MarshalJSON() ([]byte, error) {
-	type Alias NonBearerHttpSecurityScheme
-	jsonByteArray, err := json.Marshal(&Alias{
+	type NonBearerHttpSecuritySchemeAlias NonBearerHttpSecurityScheme
+	jsonByteArray, err := json.Marshal(&NonBearerHttpSecuritySchemeAlias{
     Scheme: value.Scheme,
     Description: value.Description,
     Type: value.Type,
@@ -1157,8 +1231,8 @@ type BearerHttpSecurityScheme struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *BearerHttpSecurityScheme) UnmarshalJSON(data []byte) error {
-	type Alias BearerHttpSecurityScheme
-	jsonMap := Alias{}
+	type BearerHttpSecuritySchemeAlias BearerHttpSecurityScheme
+	jsonMap := BearerHttpSecuritySchemeAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -1180,8 +1254,8 @@ func (value *BearerHttpSecurityScheme) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value BearerHttpSecurityScheme) MarshalJSON() ([]byte, error) {
-	type Alias BearerHttpSecurityScheme
-	jsonByteArray, err := json.Marshal(&Alias{
+	type BearerHttpSecuritySchemeAlias BearerHttpSecurityScheme
+	jsonByteArray, err := json.Marshal(&BearerHttpSecuritySchemeAlias{
     Scheme: value.Scheme,
     BearerFormat: value.BearerFormat,
     Type: value.Type,
@@ -1204,8 +1278,8 @@ type ApiKeyHttpSecurityScheme struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *ApiKeyHttpSecurityScheme) UnmarshalJSON(data []byte) error {
-	type Alias ApiKeyHttpSecurityScheme
-	jsonMap := Alias{}
+	type ApiKeyHttpSecuritySchemeAlias ApiKeyHttpSecurityScheme
+	jsonMap := ApiKeyHttpSecuritySchemeAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -1227,8 +1301,8 @@ func (value *ApiKeyHttpSecurityScheme) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value ApiKeyHttpSecurityScheme) MarshalJSON() ([]byte, error) {
-	type Alias ApiKeyHttpSecurityScheme
-	jsonByteArray, err := json.Marshal(&Alias{
+	type ApiKeyHttpSecuritySchemeAlias ApiKeyHttpSecurityScheme
+	jsonByteArray, err := json.Marshal(&ApiKeyHttpSecuritySchemeAlias{
     Type: value.Type,
     Name: value.Name,
     In: value.In,
@@ -1245,13 +1319,13 @@ type Oauth2Flows struct {
   Extensions map[string]json.RawMessage `json:"-"`
   Type string `json:"type,omitempty"`
   Description string `json:"description,omitempty"`
-  Flows map[string]json.RawMessage `json:"flows,omitempty"`
+  Flows json.RawMessage `json:"flows,omitempty"`
 }
 
 // UnmarshalJSON unmarshals JSON
 func (value *Oauth2Flows) UnmarshalJSON(data []byte) error {
-	type Alias Oauth2Flows
-	jsonMap := Alias{}
+	type Oauth2FlowsAlias Oauth2Flows
+	jsonMap := Oauth2FlowsAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -1272,8 +1346,8 @@ func (value *Oauth2Flows) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value Oauth2Flows) MarshalJSON() ([]byte, error) {
-	type Alias Oauth2Flows
-	jsonByteArray, err := json.Marshal(&Alias{
+	type Oauth2FlowsAlias Oauth2Flows
+	jsonByteArray, err := json.Marshal(&Oauth2FlowsAlias{
     Type: value.Type,
     Description: value.Description,
     Flows: value.Flows,
@@ -1295,8 +1369,8 @@ type Oauth2Flow struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *Oauth2Flow) UnmarshalJSON(data []byte) error {
-	type Alias Oauth2Flow
-	jsonMap := Alias{}
+	type Oauth2FlowAlias Oauth2Flow
+	jsonMap := Oauth2FlowAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -1318,8 +1392,8 @@ func (value *Oauth2Flow) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value Oauth2Flow) MarshalJSON() ([]byte, error) {
-	type Alias Oauth2Flow
-	jsonByteArray, err := json.Marshal(&Alias{
+	type Oauth2FlowAlias Oauth2Flow
+	jsonByteArray, err := json.Marshal(&Oauth2FlowAlias{
     AuthorizationUrl: value.AuthorizationUrl,
     TokenUrl: value.TokenUrl,
     RefreshUrl: value.RefreshUrl,
@@ -1344,8 +1418,8 @@ type OpenIdConnect struct {
 
 // UnmarshalJSON unmarshals JSON
 func (value *OpenIdConnect) UnmarshalJSON(data []byte) error {
-	type Alias OpenIdConnect
-	jsonMap := Alias{}
+	type OpenIdConnectAlias OpenIdConnect
+	jsonMap := OpenIdConnectAlias{}
 	var err error
 	if err = json.Unmarshal(data, &jsonMap); err != nil {
 		return err
@@ -1366,8 +1440,8 @@ func (value *OpenIdConnect) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON marshals JSON
 func (value OpenIdConnect) MarshalJSON() ([]byte, error) {
-	type Alias OpenIdConnect
-	jsonByteArray, err := json.Marshal(&Alias{
+	type OpenIdConnectAlias OpenIdConnect
+	jsonByteArray, err := json.Marshal(&OpenIdConnectAlias{
     Type: value.Type,
     Description: value.Description,
     OpenIdConnectUrl: value.OpenIdConnectUrl,

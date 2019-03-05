@@ -1,46 +1,9 @@
 // {{GoPublicName defName}} maps AsyncAPI "{{defName}}" object
 type {{GoPublicName defName}} struct {
-  {{>structFields def=def defName=defName}}
-}
-
-// UnmarshalJSON unmarshals JSON
-func (value *{{GoPublicName defName}}) UnmarshalJSON(data []byte) error {
-	type Alias {{GoPublicName defName}}
-	jsonMap := Alias{}
-	var err error
-	if err = json.Unmarshal(data, &jsonMap); err != nil {
-		return err
-  }
-
-  {{#each def.properties as |prop propName|}}
-  value.{{GoPublicName propName}} = jsonMap.{{GoPublicName propName}}
+  {{>structFields def=def asyncapi=asyncapi}}
+  {{#each def.oneOf as |item|}}
+  {{>structFields def=(lookup ../asyncapi.definitions (nameFromRef item.$ref))}}
   {{/each}}
-
-  {{#ifHasExtensions def}}
-  exts, err := ExtensionsFromJSON(data)
-	if err != nil {
-		return err
-	}
-	value.Extensions = exts
-  {{/ifHasExtensions}}
-
-	return nil
 }
 
-// MarshalJSON marshals JSON
-func (value {{GoPublicName defName}}) MarshalJSON() ([]byte, error) {
-	type Alias {{GoPublicName defName}}
-	jsonByteArray, err := json.Marshal(&Alias{
-    {{#each def.properties as |prop propName|}}
-    {{GoPublicName propName}}: value.{{GoPublicName propName}},
-    {{/each}}
-	})
-	if err != nil {
-		return nil, err
-  }
-  {{#ifHasExtensions def}}
-  return MergeExtensions(jsonByteArray, value.Extensions)
-  {{else}}
-  return jsonByteArray, nil
-  {{/ifHasExtensions}}
-}
+{{>marshal def=def defName=defName}}
