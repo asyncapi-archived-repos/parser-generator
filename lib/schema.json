@@ -1,5 +1,5 @@
 {
-  "title": "AsyncAPI 2.0.0 schema.",
+  "title": "AsyncAPI 2.0.0-rc1 schema.",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "required": [
@@ -10,22 +10,22 @@
   ],
   "additionalProperties": false,
   "patternProperties": {
-    "^x-": {
-      "$ref": "#/definitions/vendorExtension"
+    "^x-[\\w\\d\\.\\-\\_]+$": {
+      "$ref": "#/definitions/specificationExtension"
     }
   },
   "properties": {
     "asyncapi": {
       "type": "string",
       "enum": [
-        "2.0.0"
+        "2.0.0-rc1"
       ],
       "description": "The AsyncAPI specification version of this document."
     },
     "id": {
       "type": "string",
       "description": "A unique id representing the application.",
-      "format": "uri-reference"
+      "format": "uri"
     },
     "info": {
       "$ref": "#/definitions/info"
@@ -42,10 +42,6 @@
     },
     "channels": {
       "$ref": "#/definitions/channels"
-    },
-    "stream": {
-      "$ref": "#/definitions/stream",
-      "description": "The list of messages a consumer can read or write from/to a streaming API."
     },
     "components": {
       "$ref": "#/definitions/components"
@@ -69,10 +65,13 @@
       ],
       "properties": {
         "$ref": {
-          "type": "string",
-          "format": "uri"
+          "$ref": "#/definitions/ReferenceObject"
         }
       }
+    },
+    "ReferenceObject": {
+      "type": "string",
+      "format": "uri-reference"
     },
     "info": {
       "type": "object",
@@ -83,8 +82,8 @@
       ],
       "additionalProperties": false,
       "patternProperties": {
-        "^x-": {
-          "$ref": "#/definitions/vendorExtension"
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
         }
       },
       "properties": {
@@ -134,8 +133,8 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-          "$ref": "#/definitions/vendorExtension"
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
         }
       }
     },
@@ -157,8 +156,8 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-          "$ref": "#/definitions/vendorExtension"
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
         }
       }
     },
@@ -167,12 +166,12 @@
       "description": "An object representing a Server.",
       "required": [
         "url",
-        "scheme"
+        "protocol"
       ],
       "additionalProperties": false,
       "patternProperties": {
-        "^x-": {
-          "$ref": "#/definitions/vendorExtension"
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
         }
       },
       "properties": {
@@ -182,11 +181,11 @@
         "description": {
           "type": "string"
         },
-        "scheme": {
+        "protocol": {
           "type": "string",
           "description": "The transfer protocol."
         },
-        "schemeVersion": {
+        "protocolVersion": {
           "type": "string"
         },
         "variables": {
@@ -216,8 +215,8 @@
       "minProperties": 1,
       "additionalProperties": false,
       "patternProperties": {
-        "^x-": {
-          "$ref": "#/definitions/vendorExtension"
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
         }
       },
       "properties": {
@@ -249,10 +248,8 @@
         "format": "uri-template",
         "minLength": 1
       },
-      "patternProperties": {
-        "": {
-          "$ref": "#/definitions/channelItem"
-        }
+      "additionalProperties": {
+        "$ref": "#/definitions/channelItem"
       }
     },
     "components": {
@@ -269,7 +266,7 @@
         "securitySchemes": {
           "type": "object",
           "patternProperties": {
-            "^[a-zA-Z0-9\\.\\-_]+$": {
+            "^[\\w\\d\\.\\-_]+$": {
               "oneOf": [
                 {
                   "$ref": "#/definitions/Reference"
@@ -283,6 +280,24 @@
         },
         "parameters": {
           "$ref": "#/definitions/parameters"
+        },
+        "correlationIds": {
+          "type": "object",
+          "patternProperties": {
+            "^[\\w\\d\\.\\-_]+$": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/Reference"
+                },
+                {
+                  "$ref": "#/definitions/correlationId"
+                }
+              ]
+            }
+          }
+        },
+        "traits": {
+          "$ref": "#/definitions/traits"
         }
       }
     },
@@ -311,12 +326,19 @@
       "type": "object",
       "description": "A deterministic version of a JSON Schema object.",
       "patternProperties": {
-        "^x-": {
-          "$ref": "#/definitions/vendorExtension"
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
         }
       },
       "properties": {
         "$ref": {
+          "$ref": "#/definitions/ReferenceObject"
+        },
+        "nullable": {
+          "type": "boolean",
+          "default": false
+        },
+        "format": {
           "type": "string"
         },
         "title": {
@@ -329,7 +351,7 @@
         "multipleOf": {
           "type": "number",
           "minimum": 0,
-          "exclusiveMinimum": true
+          "exclusiveMinimum": 0
         },
         "maximum": {
           "type": "number"
@@ -344,10 +366,6 @@
         "exclusiveMinimum": {
           "type": "boolean",
           "default": false
-        },
-
-        "format": {
-          "type": "string"
         },
         "maxLength": {
           "type": "integer",
@@ -413,35 +431,15 @@
           "default": {}
         },
         "type": {
-          "x-go-parser-type": "string",
-          "anyOf": [
-            {
-              "enum": [
-                "array",
-                "boolean",
-                "integer",
-                "null",
-                "number",
-                "object",
-                "string"
-              ]
-            },
-            {
-              "type": "array",
-              "items": {
-                "enum": [
-                  "array",
-                  "boolean",
-                  "integer",
-                  "null",
-                  "number",
-                  "object",
-                  "string"
-                ]
-              },
-              "minItems": 1,
-              "uniqueItems": true
-            }
+          "type": "string",
+          "enum": [
+            "array",
+            "boolean",
+            "integer",
+            "null",
+            "number",
+            "object",
+            "string"
           ]
         },
         "items": {
@@ -503,7 +501,11 @@
         "externalDocs": {
           "$ref": "#/definitions/externalDocs"
         },
-        "example": {}
+        "example": {},
+        "examples": {
+          "type": "array",
+          "items": {}
+        }
       },
       "additionalProperties": false
     },
@@ -547,8 +549,8 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-          "$ref": "#/definitions/vendorExtension"
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
         }
       }
     },
@@ -556,14 +558,14 @@
       "type": "object",
       "additionalProperties": false,
       "patternProperties": {
-        "^x-": {
-          "$ref": "#/definitions/vendorExtension"
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
         }
       },
       "minProperties": 1,
       "properties": {
         "$ref": {
-          "type": "string"
+          "$ref": "#/definitions/ReferenceObject"
         },
         "parameters": {
           "type": "array",
@@ -582,20 +584,26 @@
         "deprecated": {
           "type": "boolean",
           "default": false
+        },
+        "protocolInfo": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
         }
       }
     },
     "parameter": {
       "additionalProperties": false,
       "patternProperties": {
-        "^x-": {
-          "$ref": "#/definitions/vendorExtension"
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
         }
       },
       "properties": {
         "description": {
           "type": "string",
-          "description": "A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed."
+          "description": "A brief description of the parameter. This could contain examples of use. GitHub Flavored Markdown is allowed."
         },
         "name": {
           "type": "string",
@@ -605,7 +613,7 @@
           "$ref": "#/definitions/schema"
         },
         "$ref": {
-          "type": "string"
+          "$ref": "#/definitions/ReferenceObject"
         }
       }
     },
@@ -613,8 +621,284 @@
       "type": "object",
       "additionalProperties": false,
       "patternProperties": {
-        "^x-": {
-          "$ref": "#/definitions/vendorExtension"
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
+        }
+      },
+      "properties": {
+        "traits": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/Reference"
+              },
+              {
+                "$ref": "#/definitions/operationTrait"
+              },
+              {
+                "type": "array",
+                "items": [
+                  {
+                    "oneOf": [
+                      {
+                        "$ref": "#/definitions/Reference"
+                      },
+                      {
+                        "$ref": "#/definitions/operationTrait"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "additionalItems": true
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "summary": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/tag"
+          },
+          "uniqueItems": true
+        },
+        "externalDocs": {
+          "$ref": "#/definitions/externalDocs"
+        },
+        "operationId": {
+          "type": "string"
+        },
+        "protocolInfo": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
+        },
+        "message": {
+          "$ref": "#/definitions/message"
+        }
+      }
+    },
+    "message": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/Reference"
+        },
+        {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": [
+                "oneOf"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "oneOf": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/message"
+                  }
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "patternProperties": {
+                "^x-[\\w\\d\\.\\-\\_]+$": {
+                  "$ref": "#/definitions/specificationExtension"
+                }
+              },
+              "properties": {
+                "schemaFormat": {
+                  "type": "string"
+                },
+                "contentType": {
+                  "type": "string"
+                },
+                "headers": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/definitions/Reference"
+                      },
+                      {
+                        "$ref": "#/definitions/schema"
+                      }
+                    ]
+                  }
+                },
+                "payload": {},
+                "correlationId": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/definitions/Reference"
+                    },
+                    {
+                      "$ref": "#/definitions/correlationId"
+                    }
+                  ]
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/tag"
+                  },
+                  "uniqueItems": true
+                },
+                "summary": {
+                  "type": "string",
+                  "description": "A brief summary of the message."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name of the message."
+                },
+                "title": {
+                  "type": "string",
+                  "description": "A human-friendly title for the message."
+                },
+                "description": {
+                  "type": "string",
+                  "description": "A longer description of the message. CommonMark is allowed."
+                },
+                "externalDocs": {
+                  "$ref": "#/definitions/externalDocs"
+                },
+                "deprecated": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "examples": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "protocolInfo": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                },
+                "traits": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/definitions/Reference"
+                      },
+                      {
+                        "$ref": "#/definitions/messageTrait"
+                      },
+                      {
+                        "type": "array",
+                        "items": [
+                          {
+                            "oneOf": [
+                              {
+                                "$ref": "#/definitions/Reference"
+                              },
+                              {
+                                "$ref": "#/definitions/messageTrait"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "additionalItems": true
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "object",
+      "required": [
+        "location"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
+        }
+      },
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "A optional description of the correlation ID. GitHub Flavored Markdown is allowed."
+        },
+        "location": {
+          "type": "string",
+          "description": "A runtime expression that specifies the location of the correlation ID",
+          "pattern": "^\\$message\\.(header|payload)#(/\\w+)+"
+        }
+      }
+    },
+    "specificationExtension": {
+      "description": "Any property starting with x- is valid.",
+      "additionalProperties": true,
+      "additionalItems": true
+    },
+    "tag": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "externalDocs": {
+          "$ref": "#/definitions/externalDocs"
+        }
+      },
+      "patternProperties": {
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
+        }
+      }
+    },
+    "traits": {
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/operationTrait"
+          },
+          {
+            "$ref": "#/definitions/messageTrait"
+          }
+        ]
+      }
+    },
+    "operationTrait": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
         }
       },
       "properties": {
@@ -637,128 +921,20 @@
         "operationId": {
           "type": "string"
         },
-        "message": {
-          "$ref": "#/definitions/operationMessage"
-        }
-      }
-    },
-    "operationMessage": {
-      "oneOf": [
-        {
-          "$ref": "#/definitions/message"
-        },
-        {
-          "$ref": "#/definitions/messageCollection"
-        }
-      ]
-    },
-    "messageCollection": {
-      "type": "object",
-      "required": [
-        "oneOf"
-      ],
-      "additionalProperties": false,
-      "patternProperties": {
-        "^x-": {
-          "$ref": "#/definitions/vendorExtension"
-        }
-      },
-      "properties": {
-        "oneOf": {
-          "type": "array",
-          "minItems": 2,
-          "items": {
-            "$ref": "#/definitions/message"
-          }
-        }
-      }
-    },
-    "stream": {
-      "title": "Stream Object",
-      "type": "object",
-      "additionalProperties": false,
-      "patternProperties": {
-        "^x-": {
-          "$ref": "#/definitions/vendorExtension"
-        }
-      },
-      "minProperties": 1,
-      "properties": {
-        "framing": {
-          "title": "Stream Framing Object",
+        "protocolInfo": {
           "type": "object",
-          "patternProperties": {
-            "^x-": {
-              "$ref": "#/definitions/vendorExtension"
-            }
-          },
-          "minProperties": 1,
-          "oneOf": [
-            {
-              "additionalProperties": false,
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "enum": [
-                    "chunked"
-                  ]
-                },
-                "delimiter": {
-                  "type": "string",
-                  "enum": [
-                    "\\r\\n",
-                    "\\n"
-                  ],
-                  "default": "\\r\\n"
-                }
-              }
-            },
-            {
-              "additionalProperties": false,
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "enum": [
-                    "sse"
-                  ]
-                },
-                "delimiter": {
-                  "type": "string",
-                  "enum": [
-                    "\\n\\n"
-                  ],
-                  "default": "\\n\\n"
-                }
-              }
-            }
-          ]
-        },
-        "read": {
-          "title": "Stream Read Object",
-          "type": "array",
-          "uniqueItems": true,
-          "minItems": 1,
-          "items": {
-            "$ref": "#/definitions/message"
-          }
-        },
-        "write": {
-          "title": "Stream Write Object",
-          "type": "array",
-          "uniqueItems": true,
-          "minItems": 1,
-          "items": {
-            "$ref": "#/definitions/message"
+          "additionalProperties": {
+            "type": "object"
           }
         }
       }
     },
-    "message": {
+    "messageTrait": {
       "type": "object",
       "additionalProperties": false,
       "patternProperties": {
-        "^x-": {
-          "$ref": "#/definitions/vendorExtension"
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
         }
       },
       "properties": {
@@ -769,9 +945,28 @@
           "type": "string"
         },
         "headers": {
-          "$ref": "#/definitions/schema"
+          "type": "object",
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/Reference"
+              },
+              {
+                "$ref": "#/definitions/schema"
+              }
+            ]
+          }
         },
-        "payload": {},
+        "correlationId": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/Reference"
+            },
+            {
+              "$ref": "#/definitions/correlationId"
+            }
+          ]
+        },
         "tags": {
           "type": "array",
           "items": {
@@ -802,34 +997,17 @@
           "type": "boolean",
           "default": false
         },
-        "example": {}
-      }
-    },
-    "vendorExtension": {
-      "description": "Any property starting with x- is valid.",
-      "additionalProperties": true,
-      "additionalItems": true
-    },
-    "tag": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "name"
-      ],
-      "properties": {
-        "name": {
-          "type": "string"
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
         },
-        "description": {
-          "type": "string"
-        },
-        "externalDocs": {
-          "$ref": "#/definitions/externalDocs"
-        }
-      },
-      "patternProperties": {
-        "^x-": {
-          "$ref": "#/definitions/vendorExtension"
+        "protocolInfo": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
         }
       }
     },
@@ -878,7 +1056,9 @@
         }
       },
       "patternProperties": {
-        "^x-": {}
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
+        }
       },
       "additionalProperties": false
     },
@@ -907,7 +1087,9 @@
         }
       },
       "patternProperties": {
-        "^x-": {}
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
+        }
       },
       "additionalProperties": false
     },
@@ -928,7 +1110,9 @@
         }
       },
       "patternProperties": {
-        "^x-": {}
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
+        }
       },
       "additionalProperties": false
     },
@@ -949,7 +1133,9 @@
         }
       },
       "patternProperties": {
-        "^x-": {}
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
+        }
       },
       "additionalProperties": false
     },
@@ -970,7 +1156,9 @@
         }
       },
       "patternProperties": {
-        "^x-": {}
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
+        }
       },
       "additionalProperties": false
     },
@@ -1019,7 +1207,9 @@
         }
       },
       "patternProperties": {
-        "^x-": {}
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
+        }
       },
       "additionalProperties": false
     },
@@ -1050,7 +1240,9 @@
         }
       },
       "patternProperties": {
-        "^x-": {}
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
+        }
       },
       "additionalProperties": false
     },
@@ -1084,7 +1276,9 @@
         }
       },
       "patternProperties": {
-        "^x-": {}
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
+        }
       },
       "additionalProperties": false
     },
@@ -1187,8 +1381,8 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-          "$ref": "#/definitions/vendorExtension"
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
         }
       }
     },
@@ -1212,8 +1406,8 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-          "$ref": "#/definitions/vendorExtension"
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
         }
       },
       "additionalProperties": false
@@ -1246,7 +1440,9 @@
         }
       },
       "patternProperties": {
-        "^x-": {}
+        "^x-[\\w\\d\\.\\-\\_]+$": {
+          "$ref": "#/definitions/specificationExtension"
+        }
       },
       "additionalProperties": false
     },

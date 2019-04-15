@@ -102,7 +102,7 @@ module.exports = (Handlebars, _) => {
   Handlebars.registerHelper('GoTypeFrom', GoTypeFrom);
 
   Handlebars.registerHelper('ifHasExtensions', (obj, options) => {
-    if (obj && obj.patternProperties && obj.patternProperties['^x-']) {
+    if (obj && obj.patternProperties && obj.patternProperties['^x-[\\w\\d\\.\\-\\_]+$']) {
       return options.fn(this);
     }
 
@@ -139,7 +139,7 @@ module.exports = (Handlebars, _) => {
   });
 
   Handlebars.registerHelper('shouldAvoidSchema', (name) => {
-    return ['SecurityScheme', 'HTTPSecurityScheme', 'operationMessage'].includes(name);
+    return ['SecurityScheme', 'HTTPSecurityScheme', 'message'].includes(name);
   });
 
   Handlebars.registerHelper('deref', (obj) => {
@@ -148,5 +148,9 @@ module.exports = (Handlebars, _) => {
         circular: 'ignore'
       }
     });
+  });
+
+  Handlebars.registerHelper('isPrimitive', (type) => {
+    return ['string', 'boolean', 'integer', 'number'].includes(type);
   });
 };
